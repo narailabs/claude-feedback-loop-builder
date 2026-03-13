@@ -1,0 +1,9 @@
+{
+  "name": "feedback-loop-builder",
+  "description": "Retrofit self-improving feedback loops into existing skills or agents. Makes any skill/agent learn from usage and mistakes, improving itself every run — without ever changing its scope.",
+  "version": "1.0.0",
+  "author": {
+    "name": "NarAI Labs",
+    "url": "https://github.com/narailabs"
+  }
+}
