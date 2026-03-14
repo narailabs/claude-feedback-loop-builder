@@ -23,16 +23,29 @@ The loop modifies ONLY `feedback/patterns.md` and `feedback/run-log.jsonl`. It n
 
 ### Step 1: Analyze the Target
 
-Run the analysis script to detect target type and extract metadata:
+Run the analysis script. Accept a **name**, **description**, or **path**:
 
 ```bash
-python scripts/analyze_target.py <path-to-skill-or-agent>
+# By name (searches installed plugins + ~/src/)
+python scripts/analyze_target.py browser-qa
+python scripts/analyze_target.py pdf
+
+# By path
+python scripts/analyze_target.py ./my-agent-project
+python scripts/analyze_target.py /abs/path/to/skill
 ```
 
-This outputs JSON with:
+Resolution order:
+1. Direct path (if input contains `/` or starts with `.` or `~`)
+2. Relative to CWD
+3. `~/.claude/plugins/installed_plugins.json` — exact then partial name match
+4. `~/src/`, `~/projects/`, `~/dev/` — directory name match (also tries `claude-<name>`, `<name>-skill`, `<name>-agent`)
+
+The script outputs JSON with:
 - `type`: `"skill"` or `"agent"`
 - `name`, `description`, `sections` (scope boundaries)
 - `already_has_feedback_loop`: whether one exists already
+- `resolution`: how the target was found (registry, source_dir, path)
 - Structure info (scripts/, references/, feedback/ dirs)
 
 If the target already has feedback loop markers, ask the user whether to upgrade or skip.
